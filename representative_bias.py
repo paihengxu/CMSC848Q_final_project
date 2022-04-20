@@ -22,13 +22,22 @@ def get_representative_measure(df):
         return 1 - cosine(embed, mean_embed)
 
     # calculate the similarity to the mean embedding. The larger, the more similar
-    df['representative_sim'] = df['prompt_embedding'].apply(get_dist_mean_embed)
+    df['representative_sim_prompt'] = df['prompt_embedding'].apply(get_dist_mean_embed)
 
+    # also compute the cluster for vignettes
+    df['vignette_embedding'] = df['Vignette'].apply(model.encode)
+    mean_embed = np.mean(df['vignette_embedding'].values, axis=0)
+    df['representative_sim_vignette'] = df['vignette_embedding'].apply(get_dist_mean_embed)
     return df
 
 
 if __name__ == '__main__':
-    vignettes = pd.read_csv("data_acute_cancer.csv")
-    vignettes_w_prompt = get_representative_measure()
+    for fn in ["data_acute_cancer.csv", "data_acute_non_cancer.csv", "data_chronic_cancer.csv",
+               "data_chronic_non_cancer.csv", "data_post_op.csv"]:
+        print(fn)
+        vignettes = pd.read_csv(fn)
+        vignettes_w_prompt = get_representative_measure(vignettes)
+        new_fn = fn.split('.')[0]
+        vignettes_w_prompt.to_csv(f"processed_data/{new_fn}_w_representation.csv")
     # data = vignettes[vignettes.Answer == "Yes."]
     # closed = vignettes[vignettes.Answer == "No."]
