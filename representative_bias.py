@@ -39,5 +39,3 @@ if __name__ == '__main__':
         vignettes_w_prompt = get_representative_measure(vignettes)
         new_fn = fn.split('.')[0]
         vignettes_w_prompt.to_csv(f"processed_data/{new_fn}_w_representation.csv")
-    # data = vignettes[vignettes.Answer == "Yes."]
-    # closed = vignettes[vignettes.Answer == "No."]
