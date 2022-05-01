@@ -25,8 +25,9 @@ def main():
     input_file = sys.argv[1]
     files = sc.textFile(reddit_dir + input_file + "*")
 
-    text = files.flatMap(line2jsons).filter(lambda t: "subreddit" in t and t["subreddit"] == "ChronicPain" and "selftext" in t).map(
-        json.dumps).repartition(1).saveAsTextFile(output + output_folder)
+    text = files.flatMap(line2jsons).filter(
+        lambda t: "subreddit" in t and t["subreddit"] == "ChronicPain" and "selftext" in t).map(json.dumps).repartition(
+        1).saveAsTextFile(output + output_folder)
     sc.stop()
 
 
