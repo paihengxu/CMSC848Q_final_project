@@ -14,7 +14,7 @@ def main():
     output = "/user/tonyzhou/reddit/"
     reddit_dir = "/var/reddit/"
     output_folder = "chronic_pain_dataset"
-    input_file = sys.argv[0]
+    input_file = sys.argv[1]
     files = sc.textFile(reddit_dir + input_file)
 
     text = files.map(json.loads).filter(lambda t: t["subreddit"] == "ChronicPain").map(json.dumps).saveAsTextFile(
