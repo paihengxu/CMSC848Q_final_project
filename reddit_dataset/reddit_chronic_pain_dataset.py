@@ -17,8 +17,8 @@ def main():
     input_file = sys.argv[1]
     files = sc.textFile(reddit_dir + input_file)
 
-    text = files.map(json.loads).filter(lambda t: t["subreddit"] == "ChronicPain").map(json.dumps).saveAsTextFile(
-        output + output_folder)
+    text = files.map(json.loads).filter(lambda t: t["subreddit"] == "ChronicPain" and "selftext" in t).map(
+        json.dumps).repartition(1).saveAsTextFile(output + output_folder)
     sc.stop()
 
 
