@@ -10,6 +10,14 @@ sc = SparkContext(
         sc_name))
 
 
+def line2jsons(line):
+    try:
+        j = json.loads(line.strip())
+        return [j]
+    except ValueError:
+        return []
+
+
 def main():
     output = "/user/tonyzhou/reddit/"
     reddit_dir = "/var/reddit/"
@@ -17,7 +25,7 @@ def main():
     input_file = sys.argv[1]
     files = sc.textFile(reddit_dir + input_file + "*")
 
-    text = files.map(json.loads).filter(lambda t: t["subreddit"] == "ChronicPain" and "selftext" in t).map(
+    text = files.flatMap(line2jsons).filter(lambda t: t["subreddit"] == "ChronicPain" and "selftext" in t).map(
         json.dumps).repartition(1).saveAsTextFile(output + output_folder)
     sc.stop()
 
