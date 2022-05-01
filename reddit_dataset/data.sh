@@ -1,5 +1,5 @@
-export PYSPARK_PYTHON="/bin/python3"
-export PYSPARK_DRIVER_PYTHON="/bin/python3"
+export PYSPARK_PYTHON=python2.7
+export PYSPARK_DRIVER_PYTHON=python2.7
 
 spark-submit --master yarn --queue umsi-qmei \
 --num-executors 40 --executor-cores 5 --executor-memory 10G \
