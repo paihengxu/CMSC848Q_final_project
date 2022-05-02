@@ -69,7 +69,7 @@ def genderize_open(p, g):
     return p
 
 
-def race_name_open(p, r, q):
+def race_name_open(p, r, q, g):
     p = p.replace('[race]', r)
     p = p.replace('Patient D', names[r][g][q])
     return p

@@ -75,7 +75,7 @@ for q in range(10):
     for g in genders:
         open_prompt_gendered = genderize_open(open_prompt_standard, g)
         for r in races:
-            open_prompt = race_name_open(open_prompt_gendered, r, q)
+            open_prompt = race_name_open(open_prompt_gendered, r, q, g)
             final_prompt = closed_prompt + open_prompt
 
             '''
