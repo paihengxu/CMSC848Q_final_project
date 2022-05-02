@@ -109,28 +109,27 @@ for q in range(10):
             gen_probs = torch.gather(probs, 2, gen_sequences[:, :, None]).squeeze(-1)
             print(gen_probs)
             '''
-            break
 
             # EXAMPLE WITH GPT-3 OPEN AI API / REPLACE WITH YOUR OWN EXPERIMENT
             # openai.api_key = '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'
             # response = openai.Completion.create(engine="davinci", prompt=final_prompt, max_tokens=max_tokens, temperature=temp, n=1, logprobs=logp, stop=stop)
-            response['closed_prompt'] = closed_prompt
-            response['open_prompt'] = open_prompt
-            response['prompt_num'] = q
-            response['race'] = r
-            response['gender'] = g
-            response['name'] = names[r][g][q]
-            out1.append(response)
+            # response['closed_prompt'] = closed_prompt
+            # response['open_prompt'] = open_prompt
+            # response['prompt_num'] = q
+            # response['race'] = r
+            # response['gender'] = g
+            # response['name'] = names[r][g][q]
+            # out1.append(response)
         break
     break
 
-test_tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
-test_model = GPT2LMHeadModel.from_pretrained('gpt2')
-
-inputs = test_tokenizer("Hello, my dog is cute and ", return_tensors="pt")
-input_ids = inputs.input_ids
-generation_output = test_model.generate(**inputs, return_dict_in_generate=True, output_scores=True)
-print(generation_output)
+# test_tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
+# test_model = GPT2LMHeadModel.from_pretrained('gpt2')
+#
+# inputs = test_tokenizer("Hello, my dog is cute and ", return_tensors="pt")
+# input_ids = inputs.input_ids
+# generation_output = test_model.generate(**inputs, return_dict_in_generate=True, output_scores=True)
+# print(generation_output)
 
 # follow code from https://discuss.huggingface.co/t/generation-probabilities-how-to-compute-probabilities-of-output-scores-for-gpt2/3175
 # gen_sequences = generation_output.sequences[:, input_ids.shape[-1]:]
