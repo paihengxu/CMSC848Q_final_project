@@ -10,6 +10,11 @@ from functools import partial
 import json
 from const import *
 
+vignettes = pd.read_csv("data_acute_cancer.csv")
+data = vignettes[vignettes.Answer == "Yes."]
+closed = vignettes[vignettes.Answer == "No."]
+
+
 # FUNCTIONS TO SET UP CLOSED PROMPTS
 
 def create_closed(i, dose):
