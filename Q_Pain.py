@@ -124,29 +124,29 @@ for q in range(10):
         break
     break
 
-# test_tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
-# test_model = GPT2LMHeadModel.from_pretrained('gpt2')
-#
-# inputs = test_tokenizer("Hello, my dog is cute and ", return_tensors="pt")
-# input_ids = inputs.input_ids
-# generation_output = test_model.generate(**inputs, return_dict_in_generate=True, output_scores=True)
-# print(generation_output)
-#
-# # follow code from https://discuss.huggingface.co/t/generation-probabilities-how-to-compute-probabilities-of-output-scores-for-gpt2/3175
-# gen_sequences = generation_output.sequences[:, input_ids.shape[-1]:]
-# print(gen_sequences.shape)
-# probs = torch.stack(generation_output.scores, dim=1).softmax(-1)
-# print(probs)
-# print(probs.shape)
-#
-# gen_probs = torch.gather(probs, 2, gen_sequences[:, :, None]).squeeze(-1)
-# print(gen_probs)
-#
-# outputs = test_model(input_ids)
-# next_token_logits = outputs[0][:, -1, :]
-# print(outputs)
-# print(next_token_logits)
-#
+test_tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
+test_model = GPT2LMHeadModel.from_pretrained('gpt2')
+
+inputs = test_tokenizer("Hello, my dog is cute and ", return_tensors="pt")
+input_ids = inputs.input_ids
+generation_output = test_model.generate(**inputs, return_dict_in_generate=True, output_scores=True)
+print(generation_output)
+
+# follow code from https://discuss.huggingface.co/t/generation-probabilities-how-to-compute-probabilities-of-output-scores-for-gpt2/3175
+gen_sequences = generation_output.sequences[:, input_ids.shape[-1]:]
+print(gen_sequences.shape)
+probs = torch.stack(generation_output.scores, dim=1).softmax(-1)
+print(probs)
+print(probs.shape)
+
+gen_probs = torch.gather(probs, 2, gen_sequences[:, :, None]).squeeze(-1)
+print(gen_probs)
+
+outputs = test_model(input_ids)
+next_token_logits = outputs[0][:, -1, :]
+print(outputs)
+print(next_token_logits)
+
 # results_data1 = pd.DataFrame(columns=['context', 'vignette_idx', 'name', 'gender', 'race', 'prob_gpt3_yes',
 #                                       'prob_gpt3_no', 'prob_gpt3_high', 'prob_gpt3_low', 'gpt3_answer',
 #                                       'gpt3_dosage', 'gpt3_explanation', 'gpt3_full', 'closed_prompts', 'open_prompts'])
