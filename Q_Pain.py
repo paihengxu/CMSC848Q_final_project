@@ -133,55 +133,16 @@ generation_output = test_model.generate(**inputs, return_dict_in_generate=True, 
 print(generation_output)
 
 # follow code from https://discuss.huggingface.co/t/generation-probabilities-how-to-compute-probabilities-of-output-scores-for-gpt2/3175
-gen_sequences = generation_output.sequences[:, input_ids.shape[-1]:]
-print(gen_sequences.shape)
-probs = torch.stack(generation_output.scores, dim=1).softmax(-1)
-print(probs)
-print(probs.shape)
-
-gen_probs = torch.gather(probs, 2, gen_sequences[:, :, None]).squeeze(-1)
-print(gen_probs)
-
-outputs = test_model(input_ids)
-next_token_logits = outputs[0][:, -1, :]
-print(outputs)
-print(next_token_logits)
-
-results_data1 = pd.DataFrame(columns=['context', 'vignette_idx', 'name', 'gender', 'race', 'prob_gpt3_yes',
-                                      'prob_gpt3_no', 'prob_gpt3_high', 'prob_gpt3_low', 'gpt3_answer',
-                                      'gpt3_dosage', 'gpt3_explanation', 'gpt3_full', 'closed_prompts', 'open_prompts'])
-
-for generated in out1:
-    # Getting the probs for the first and second generated tokens (skipping the punctuation)
-    logprobs_yn = generated['choices'][0]['logprobs']['top_logprobs'][0]
-    logprobs_dosage = generated['choices'][0]['logprobs']['top_logprobs'][7]
-
-    # Finding the probs for our chosen words
-    options_yn_prob = {option: np.exp(logprobs_yn.get(' ' + str(option), -10000)) for option in OPTIONS_YESNO}
-    options_dosage_prob = {option: np.exp(logprobs_dosage.get(' ' + str(option), -10000)) for option in OPTIONS_DOSAGE}
-
-    prob_yes = options_yn_prob['Yes']
-    prob_no = options_yn_prob['No']
-
-    prob_high = options_dosage_prob['High']
-    prob_low = options_dosage_prob['Low']
-
-    # GPT-3 Output
-    gen_text = generated['choices'][0]['text']
-    prompt = generated['open_prompt']
-    closed = generated['closed_prompt']
-    q = generated['prompt_num']
-    r = generated['race']
-    g = generated['gender']
-    name = generated['name']
-
-    split_answer = gen_text.split(sep="\n")
-    answer = split_answer[0]
-    dosage = split_answer[1]
-    explanation = split_answer[2]
-
-    new_idx = ['Acute Cancer Pain', q, name, g, r, prob_yes,
-               prob_no, prob_high, prob_low, answer, dosage, explanation, gen_text, closed, prompt]
-    results_data1 = results_data1.append(dict(zip(results_data1.columns, new_idx)), ignore_index=True)
-
-print(results_data1)
+# gen_sequences = generation_output.sequences[:, input_ids.shape[-1]:]
+# print(gen_sequences.shape)
+# probs = torch.stack(generation_output.scores, dim=1).softmax(-1)
+# print(probs)
+# print(probs.shape)
+#
+# gen_probs = torch.gather(probs, 2, gen_sequences[:, :, None]).squeeze(-1)
+# print(gen_probs)
+#
+# outputs = test_model(input_ids)
+# next_token_logits = outputs[0][:, -1, :]
+# print(outputs)
+# print(next_token_logits)
