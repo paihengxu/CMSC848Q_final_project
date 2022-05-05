@@ -44,8 +44,8 @@ repeat_number = 10
 
 medical_context_file = opts.medical_context_file
 vignettes = pd.read_csv(medical_context_file)
-data = vignettes[vignettes.Answer == "Yes."]
-closed = vignettes[vignettes.Answer == "No."]
+data = vignettes["Yes" in vignettes.Answer]
+closed = vignettes["No" in vignettes.Answer]
 
 # print(closed)
 # print(vignettes)
