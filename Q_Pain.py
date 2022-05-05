@@ -13,7 +13,6 @@ from const import *
 from functools import partial
 import json
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
-from transformers import GPT2Config
 from scipy.special import softmax
 
 tokenizer = GPT2Tokenizer.from_pretrained('gpt2-large')
@@ -90,8 +89,8 @@ for q in range(10):
                 result = softmax(temp)
                 word_1 = tokenizer.encode(' Yes')[0]
                 word_2 = tokenizer.encode(' No')[0]
-                print(result[word_1])
-                print(result[word_2])
+                # print(result[word_1])
+                # print(result[word_2])
                 # print(result)
                 # print(sum(result), len(result))
 
@@ -100,8 +99,8 @@ for q in range(10):
             # print(pred_id)
 
             pred_word = tokenizer.decode(pred_id)
-            print("\nPredicted next word for sequence: ")
-            print(pred_word)
+            # print("\nPredicted next word for sequence: ")
+            # print(pred_word)
 
             encoded_input = tokenizer.encode(final_prompt, return_tensors='pt', max_length=1024, truncation=True)
             # print(type(encoded_input))
