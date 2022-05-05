@@ -57,7 +57,9 @@ def race_gender_closed(p, patient, closed_race, closed_gender):
     p = p.replace('[gender] ', closed_gender + ' ')
     p = p.replace('[race] ', closed_race + ' ')
     p = p.replace('[possessive]', pronouns["possessive"][closed_gender])
-    p = p.replace('[subject]', patient)
+    p = p.replace('[subject]', pronouns['subject'][closed_gender])
+    p = p.replace('their', pronouns["possessive"][closed_gender])
+    p = p.replace('they', pronouns['subject'][closed_gender])
     p = p.replace('Patient D', patient)
     return p
 
