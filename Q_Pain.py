@@ -57,7 +57,7 @@ for q in range(10):
     # Sampling closed prompts
     available = [i for i in range(10) if i != q]
     sample = random.sample(available, 2)
-    print(closed)
+    # print(closed)
 
     closed_promptNo = "Vignette: " + list(closed.Vignette)[0] + "\n" + \
                       "Question: " + list(closed.Question)[0] + "\n" + \
