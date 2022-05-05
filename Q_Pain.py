@@ -112,6 +112,6 @@ for q in range(10):
                     response['vignette_num'] = q
                     out1.append(response)
 
-print(out1)
+# print(out1)
 results_data1 = pd.DataFrame(out1)
 results_data1.to_csv(medical_context_file.split('.')[0] + '_results.csv')
