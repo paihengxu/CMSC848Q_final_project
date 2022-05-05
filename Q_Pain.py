@@ -61,54 +61,50 @@ for q in range(10):
 
     closed_prompt0 = create_closed(sample[0], dose_high)
 
-    closed_gender = "man"
-    closed_race = "Asian"
-
-    closed_promptNo = race_gender_closed(closed_promptNo, 'Patient B', closed_gender, closed_race)
-    closed_prompt0 = race_gender_closed(closed_prompt0, 'Patient A', closed_gender, closed_race)
-    closed_prompt = closed_prompt0 + closed_promptNo
-
-    print(closed_prompt)
-
     # Generate by going through genders and races
-    for g in genders:
-        open_prompt_gendered = genderize_open(open_prompt_standard, g)
-        for r in races:
-            response = {}  # initialize response for GPT-2
-            open_prompt = race_name_open(open_prompt_gendered, r, q, g)
-            final_prompt = closed_prompt + open_prompt
+    for closed_gender in genders:
+        for closed_race in races:
+            closed_promptNo = race_gender_closed(closed_promptNo, 'Patient B', closed_gender, closed_race)
+            closed_prompt0 = race_gender_closed(closed_prompt0, 'Patient A', closed_gender, closed_race)
+            closed_prompt = closed_prompt0 + closed_promptNo
+            for g in genders:
+                open_prompt_gendered = genderize_open(open_prompt_standard, g)
+                for r in races:
+                    response = {}  # initialize response for GPT-2
+                    open_prompt = race_name_open(open_prompt_gendered, r, q, g)
+                    final_prompt = closed_prompt + open_prompt
 
-            indexed_tokens = tokenizer.encode(final_prompt)
-            tokens_tensor = torch.tensor([indexed_tokens]).to(device)
+                    indexed_tokens = tokenizer.encode(final_prompt)
+                    tokens_tensor = torch.tensor([indexed_tokens]).to(device)
 
-            with torch.no_grad():
-                predictions = model(tokens_tensor)
-                results = predictions[0]
-                temp = results[0, -1, :]
-                temp = temp.cpu().numpy()
-                result = softmax(temp)
-                word_1 = tokenizer.encode(' Yes')[0]
-                word_2 = tokenizer.encode(' No')[0]
+                    with torch.no_grad():
+                        predictions = model(tokens_tensor)
+                        results = predictions[0]
+                        temp = results[0, -1, :]
+                        temp = temp.cpu().numpy()
+                        result = softmax(temp)
+                        word_1 = tokenizer.encode(' Yes')[0]
+                        word_2 = tokenizer.encode(' No')[0]
 
-            pred_id = torch.argmax(results[0, -1, :]).item()
-            # print("\nPredicted token ID of next word: ")
-            # print(pred_id)
+                    pred_id = torch.argmax(results[0, -1, :]).item()
+                    # print("\nPredicted token ID of next word: ")
+                    # print(pred_id)
 
-            pred_word = tokenizer.decode(pred_id)
-            # print("\nPredicted next word for sequence: ")
-            # print(pred_word)
+                    pred_word = tokenizer.decode(pred_id)
+                    # print("\nPredicted next word for sequence: ")
+                    # print(pred_word)
 
-            response['context'] = medical_context_file.split('.')[0]
-            response['yes_prob'] = result[word_1]
-            response['no_prob'] = result[word_2]
-            response['next_word_pred'] = pred_word
-            response['closed_prompt_race'] = " "
-            response['closed_prompt_gender'] = " "
-            response['open_prompt_race'] = r
-            response['open_prompt_gender'] = g
-            response['open_prompt_name'] = names[r][g][q]
-            response['vignette_num'] = q
-            out1.append(response)
+                    response['context'] = medical_context_file.split('.')[0]
+                    response['yes_prob'] = result[word_1]
+                    response['no_prob'] = result[word_2]
+                    response['next_word_pred'] = pred_word
+                    response['closed_prompt_race'] = closed_race
+                    response['closed_prompt_gender'] = closed_gender
+                    response['open_prompt_race'] = r
+                    response['open_prompt_gender'] = g
+                    response['open_prompt_name'] = names[r][g][q]
+                    response['vignette_num'] = q
+                    out1.append(response)
 
 print(out1)
 results_data1 = pd.DataFrame(out1)
