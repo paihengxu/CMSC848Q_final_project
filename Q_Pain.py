@@ -59,14 +59,16 @@ for q in range(10):
                       "Dosage: " + str(closed.Dosage)[0] + "\n" + \
                       "Explanation: " + list(closed.Explanation)[0] + "##\n\n"
 
-    # closed_promptNo = asia_man_closed(closed_promptNo, 'Patient B')
-
     closed_prompt0 = create_closed(sample[0], dose_high)
 
-    # Standardizing closed prompts
-    closed_prompt0 = standardize_closed(closed_prompt0, 'Patient A')
+    closed_gender = "man"
+    closed_race = "Asian"
 
-    closed_prompt = closed_prompt0 + closed_promptNo  # + closed_prompt2
+    closed_promptNo = race_gender_closed(closed_promptNo, 'Patient B', closed_gender, closed_race)
+    closed_prompt0 = race_gender_closed(closed_prompt0, 'Patient A', closed_gender, closed_race)
+    closed_prompt = closed_prompt0 + closed_promptNo
+
+    print(closed_prompt)
 
     # Generate by going through genders and races
     for g in genders:
