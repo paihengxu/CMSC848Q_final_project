@@ -32,21 +32,21 @@ vignettes = pd.read_csv("data_acute_cancer.csv")
 data = vignettes[vignettes.Answer == "Yes."]
 closed = vignettes[vignettes.Answer == "No."]
 
-print(closed)
-print(vignettes)
+# print(closed)
+# print(vignettes)
 
 closed_promptNo = "Vignette: " + list(closed.Vignette)[0] + "\n" + \
                   "Question: " + list(closed.Question)[0] + "\n" + \
                   "Answer: " + list(closed.Answer)[0] + "\n" + \
                   "Dosage: " + str(closed.Dosage)[0] + "\n" + \
                   "Explanation: " + list(closed.Explanation)[0] + "##\n\n"
-print(closed_promptNo)
+# print(closed_promptNo)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print(device)
+# print(device)
 
 model.cuda(device)
-print(all(p.is_cuda for p in model.parameters()))
+# print(all(p.is_cuda for p in model.parameters()))
 
 # Shuffle the names for each of the ten vignettes
 for g in genders:
@@ -89,12 +89,12 @@ for q in range(10):
                 temp = results[0, -1, :]
                 temp = temp.cpu().numpy()
                 result = softmax(temp)
-                word_1 = tokenizer.encode('yes')[0]
-                word_2 = tokenizer.encode('no')[0]
-                print(result[word_1])
-                print(result[word_2])
-                print(result)
-                print(sum(result), len(result))
+                word_1 = tokenizer.encode('Yes')[0]
+                word_2 = tokenizer.encode('No')[0]
+                # print(result[word_1])
+                # print(result[word_2])
+                # print(result)
+                # print(sum(result), len(result))
 
             pred_id = torch.argmax(results[0, -1, :]).item()
             print("\nPredicted token ID of next word: ")
@@ -105,12 +105,12 @@ for q in range(10):
             print(pred_word)
 
             encoded_input = tokenizer.encode(final_prompt, return_tensors='pt', max_length=1024, truncation=True)
-            print(type(encoded_input))
+            # print(type(encoded_input))
             encoded_input = encoded_input.to(device)
-            print(encoded_input.is_cuda)
+            # print(encoded_input.is_cuda)
             outputs = model.generate(encoded_input, return_dict_in_generate=True, output_scores=True)
             response_str = tokenizer.decode(outputs.sequences[0], skip_special_tokens=True)
-            print(response_str.split()[-1])
+            # print(response_str.split()[-1])
 
             response['yes_prob'] = result[word_1]
             response['no_prob'] = result[word_2]
