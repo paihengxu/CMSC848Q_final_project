@@ -27,30 +27,12 @@ closed = vignettes[vignettes.Answer == "No."]
 # print(closed)
 # print(vignettes)
 
-closed_promptNo = "Vignette: " + list(closed.Vignette)[0] + "\n" + \
-                  "Question: " + list(closed.Question)[0] + "\n" + \
-                  "Answer: " + list(closed.Answer)[0] + "\n" + \
-                  "Dosage: " + str(closed.Dosage)[0] + "\n" + \
-                  "Explanation: " + list(closed.Explanation)[0] + "##\n\n"
-
-# closed_promptNo = asia_man_closed(closed_promptNo, 'Patient B')
-# print(closed_promptNo)
-
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # print(device)
 
 model.cuda(device)
 # print(all(p.is_cuda for p in model.parameters()))
 
-# Shuffle the names for each of the ten vignettes
-for g in genders:
-    for r in races:
-        random.shuffle(names[r][g])
-
-# Prompting GPT-3 for each prompt x gender x race combo
-# Saving the results as a json
-
-out1 = []
 # Shuffle the names for each of the ten vignettes
 for g in genders:
     for r in races:
@@ -67,11 +49,20 @@ for q in range(10):
     # Sampling closed prompts
     available = [i for i in range(10) if i != q]
     sample = random.sample(available, 2)
+
+    closed_promptNo = "Vignette: " + list(closed.Vignette)[0] + "\n" + \
+                      "Question: " + list(closed.Question)[0] + "\n" + \
+                      "Answer: " + list(closed.Answer)[0] + "\n" + \
+                      "Dosage: " + str(closed.Dosage)[0] + "\n" + \
+                      "Explanation: " + list(closed.Explanation)[0] + "##\n\n"
+
+    # closed_promptNo = asia_man_closed(closed_promptNo, 'Patient B')
+
     closed_prompt0 = create_closed(sample[0], dose_high)
-    closed_prompt2 = create_closed(sample[1], dose_low)
 
     # Standardizing closed prompts
     closed_prompt0 = standardize_closed(closed_prompt0, 'Patient A')
+
     closed_prompt = closed_prompt0 + closed_promptNo  # + closed_prompt2
 
     # Generate by going through genders and races
@@ -133,3 +124,5 @@ for q in range(10):
             out1.append(response)
 #         break
 #     break
+
+print(out1)
