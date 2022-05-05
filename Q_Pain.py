@@ -18,8 +18,8 @@ from scipy.special import softmax
 tokenizer = GPT2Tokenizer.from_pretrained('gpt2-large')
 model = GPT2LMHeadModel.from_pretrained('gpt2-large', pad_token_id=tokenizer.eos_token_id, max_length=700)
 # model = GPT2LMHeadModel.from_pretrained('gpt2-large', config=config)
-
-vignettes = pd.read_csv("data_acute_cancer.csv")
+medical_context_file = "data_acute_cancer.csv"
+vignettes = pd.read_csv(medical_context_file)
 data = vignettes[vignettes.Answer == "Yes."]
 closed = vignettes[vignettes.Answer == "No."]
 
@@ -41,6 +41,8 @@ for g in genders:
 # Saving the results as a json
 
 out1 = []
+repeat_number = 10
+
 for q in range(10):
     open_prompt_standard = create_open_standard(q)
     print("---------- DOING VIGNETTE #", q, " ----------")
@@ -110,16 +112,17 @@ for q in range(10):
             response_str = tokenizer.decode(outputs.sequences[0], skip_special_tokens=True)
             # print(response_str.split()[-1])
 
+            response['medical_context'] = medical_context_file.split('.')[0]
             response['yes_prob'] = result[word_1]
             response['no_prob'] = result[word_2]
             response['next_word_pred'] = pred_word
             response['next_word_gen'] = response_str.split()[-1]
-            response['closed_prompt'] = closed_prompt
-            response['open_prompt'] = open_prompt
-            response['prompt_num'] = q
-            response['race'] = r
-            response['gender'] = g
-            response['name'] = names[r][g][q]
+            # response['closed_prompt'] = closed_prompt
+            # response['open_prompt'] = open_prompt
+            response['vignette_num'] = q
+            response['open_prompt_race'] = r
+            response['open_prompt_gender'] = g
+            response['open_prompt_name'] = names[r][g][q]
             out1.append(response)
 #         break
 #     break
