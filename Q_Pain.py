@@ -20,6 +20,7 @@ tokenizer = GPT2Tokenizer.from_pretrained('gpt2-large', max_length=1024)
 
 # Initializing a GPT2 configuration
 configuration = GPT2Config()
+configuration.max_length = 700
 
 # Initializing a model from the configuration
 model = GPT2LMHeadModel(configuration)
