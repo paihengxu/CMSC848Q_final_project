@@ -14,6 +14,7 @@ from functools import partial
 import json
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
 from transformers import GPT2Config
+from scipy.special import softmax
 
 tokenizer = GPT2Tokenizer.from_pretrained('gpt2-large', max_length=1024)
 
@@ -75,73 +76,47 @@ for q in range(10):
     for g in genders:
         open_prompt_gendered = genderize_open(open_prompt_standard, g)
         for r in races:
+            response = {}
             open_prompt = race_name_open(open_prompt_gendered, r, q, g)
             final_prompt = closed_prompt + open_prompt
 
-            '''
-            # for getting loss
-            final_prompt = closed_prompt + open_prompt + '{}'
-            print(score(final_prompt.format('no')))
-            break
-            '''
+            indexed_tokens = tokenizer.encode(final_prompt)
+            tokens_tensor = torch.tensor([indexed_tokens]).to(device)
+
+            with torch.no_grad():
+                predictions = model(tokens_tensor)
+                results = predictions[0]
+                temp = results[0, -1, :]
+                temp = temp.cpu().numpy()
+                result = softmax(temp)
+                word_1 = tokenizer.encode('yes')[0]
+                word_2 = tokenizer.encode('no')[0]
+                print(result[word_1])
+                print(result[word_2])
+                print(result)
+                print(sum(result), len(result))
+
+            pred_id = torch.argmax(results[0, -1, :]).item()
+            print("\nPredicted token ID of next word: ")
+            print(pred_id)
+
+            pred_word = tokenizer.decode(pred_id)
+            print("\nPredicted next word for sequence: ")
+            print(pred_word)
 
             encoded_input = tokenizer.encode(final_prompt, return_tensors='pt', max_length=1024, truncation=True)
             print(type(encoded_input))
             encoded_input = encoded_input.to(device)
             print(encoded_input.is_cuda)
             outputs = model.generate(encoded_input, return_dict_in_generate=True, output_scores=True)
-            response = tokenizer.decode(outputs.sequences[0], skip_special_tokens=True)
+            response_str = tokenizer.decode(outputs.sequences[0], skip_special_tokens=True)
+            print(response_str.split()[-1])
+
+            response['yes_prob'] = result[word_1]
+            response['no_prob'] = result[word_2]
+            response['next_word_pred'] = pred_word
+            response['next_word_gen'] = response_str.split()[-1]
+
             print(response)
-
-            '''
-            # get probability
-            # This gets probability of predicted word, but when it's not "no", we cannot know the probability of "no"
-            # follow code from https://discuss.huggingface.co/t/generation-probabilities-how-to-compute-probabilities-of-output-scores-for-gpt2/3175
-            gen_sequences = outputs.sequences[:, encoded_input.shape[-1]:]
-            print(gen_sequences.shape)
-            print(outputs)
-            next_token_logits = outputs[0][:, -1, :]
-            print(next_token_logits)
-            probs = torch.stack(outputs.scores, dim=1).softmax(-1)
-            print(probs)
-            print(probs.shape)
-
-            gen_probs = torch.gather(probs, 2, gen_sequences[:, :, None]).squeeze(-1)
-            print(gen_probs)
-            '''
-
-            # EXAMPLE WITH GPT-3 OPEN AI API / REPLACE WITH YOUR OWN EXPERIMENT
-            # openai.api_key = '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'
-            # response = openai.Completion.create(engine="davinci", prompt=final_prompt, max_tokens=max_tokens, temperature=temp, n=1, logprobs=logp, stop=stop)
-            # response['closed_prompt'] = closed_prompt
-            # response['open_prompt'] = open_prompt
-            # response['prompt_num'] = q
-            # response['race'] = r
-            # response['gender'] = g
-            # response['name'] = names[r][g][q]
-            # out1.append(response)
         break
     break
-
-# test_tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
-# test_model = GPT2LMHeadModel.from_pretrained('gpt2')
-#
-# inputs = test_tokenizer("Hello, my dog is cute and ", return_tensors="pt")
-# input_ids = inputs.input_ids
-# generation_output = test_model.generate(**inputs, return_dict_in_generate=True, output_scores=True)
-# print(generation_output)
-
-# follow code from https://discuss.huggingface.co/t/generation-probabilities-how-to-compute-probabilities-of-output-scores-for-gpt2/3175
-# gen_sequences = generation_output.sequences[:, input_ids.shape[-1]:]
-# print(gen_sequences.shape)
-# probs = torch.stack(generation_output.scores, dim=1).softmax(-1)
-# print(probs)
-# print(probs.shape)
-#
-# gen_probs = torch.gather(probs, 2, gen_sequences[:, :, None]).squeeze(-1)
-# print(gen_probs)
-#
-# outputs = test_model(input_ids)
-# next_token_logits = outputs[0][:, -1, :]
-# print(outputs)
-# print(next_token_logits)
