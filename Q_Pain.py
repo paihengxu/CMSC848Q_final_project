@@ -66,13 +66,14 @@ for q in range(10):
                       "Explanation: " + list(closed.Explanation)[0] + "##\n\n"
 
     closed_prompt0 = create_closed(sample[0], dose_high)
+    closed_prompt2 = create_closed(sample[1], dose_low)
 
     # Generate by going through genders and races
     for closed_gender in genders:
         for closed_race in races:
             closed_promptNo = race_gender_closed(closed_promptNo, 'Patient B', closed_gender, closed_race)
             closed_prompt0 = race_gender_closed(closed_prompt0, 'Patient A', closed_gender, closed_race)
-            closed_prompt = closed_prompt0 + closed_promptNo
+            closed_prompt = closed_prompt0 + closed_prompt2 + closed_promptNo
 
             for g in genders:
                 open_prompt_gendered = genderize_open(open_prompt_standard, g)
