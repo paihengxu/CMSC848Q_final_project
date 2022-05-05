@@ -53,10 +53,10 @@ def my_standardize_closed(p):
     return p
 
 
-def asia_man_closed(p, patient):
-    p = p.replace('[gender] ', 'man ')
-    p = p.replace('[race] ', 'asian ')
-    p = p.replace('[possessive]', 'his')
+def race_gender_closed(p, patient, closed_race, closed_gender):
+    p = p.replace('[gender] ', closed_gender + ' ')
+    p = p.replace('[race] ', closed_race + ' ')
+    p = p.replace('[possessive]', pronouns["possessive"][closed_gender])
     p = p.replace('[subject]', patient)
     p = p.replace('Patient D', patient)
     return p

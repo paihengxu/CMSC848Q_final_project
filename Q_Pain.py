@@ -100,12 +100,12 @@ for q in range(10):
             response['yes_prob'] = result[word_1]
             response['no_prob'] = result[word_2]
             response['next_word_pred'] = pred_word
-            # response['closed_prompt'] = closed_prompt
-            # response['open_prompt'] = open_prompt
-            response['vignette_num'] = q
+            response['closed_prompt_race'] = " "
+            response['closed_prompt_gender'] = " "
             response['open_prompt_race'] = r
             response['open_prompt_gender'] = g
             response['open_prompt_name'] = names[r][g][q]
+            response['vignette_num'] = q
             out1.append(response)
 
 print(out1)
