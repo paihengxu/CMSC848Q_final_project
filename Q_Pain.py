@@ -16,7 +16,7 @@ from transformers import GPT2LMHeadModel, GPT2Tokenizer
 from scipy.special import softmax
 
 tokenizer = GPT2Tokenizer.from_pretrained('gpt2-large')
-model = GPT2LMHeadModel.from_pretrained('gpt2-large', pad_token_id=tokenizer.eos_token_id, max_length=700)
+model = GPT2LMHeadModel.from_pretrained('gpt2-large', pad_token_id=tokenizer.eos_token_id, max_length=800)
 # model = GPT2LMHeadModel.from_pretrained('gpt2-large', config=config)
 medical_context_file = "data_acute_cancer.csv"
 vignettes = pd.read_csv(medical_context_file)
