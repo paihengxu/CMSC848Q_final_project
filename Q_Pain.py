@@ -16,10 +16,8 @@ from transformers import GPT2LMHeadModel, GPT2Tokenizer
 from transformers import GPT2Config
 from scipy.special import softmax
 
-config = GPT2Config.from_pretrained('gpt2-large')
-config.max_length = 700
 tokenizer = GPT2Tokenizer.from_pretrained('gpt2-large')
-model = GPT2LMHeadModel.from_pretrained('gpt2-large', pad_token_id=tokenizer.eos_token_id)
+model = GPT2LMHeadModel.from_pretrained('gpt2-large', pad_token_id=tokenizer.eos_token_id, max_length=700)
 # model = GPT2LMHeadModel.from_pretrained('gpt2-large', config=config)
 
 vignettes = pd.read_csv("data_acute_cancer.csv")
@@ -36,7 +34,7 @@ closed_promptNo = "Vignette: " + list(closed.Vignette)[0] + "\n" + \
                   "Explanation: " + list(closed.Explanation)[0] + "##\n\n"
 
 # closed_promptNo = asia_man_closed(closed_promptNo, 'Patient B')
-print(closed_promptNo)
+# print(closed_promptNo)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # print(device)
@@ -103,24 +101,24 @@ for q in range(10):
                 word_2 = tokenizer.encode(' No')[0]
                 print(result[word_1])
                 print(result[word_2])
-                print(result)
-                print(sum(result), len(result))
+                # print(result)
+                # print(sum(result), len(result))
 
             pred_id = torch.argmax(results[0, -1, :]).item()
-            print("\nPredicted token ID of next word: ")
-            print(pred_id)
+            # print("\nPredicted token ID of next word: ")
+            # print(pred_id)
 
             pred_word = tokenizer.decode(pred_id)
             print("\nPredicted next word for sequence: ")
             print(pred_word)
 
             encoded_input = tokenizer.encode(final_prompt, return_tensors='pt', max_length=1024, truncation=True)
-            print(type(encoded_input))
+            # print(type(encoded_input))
             encoded_input = encoded_input.to(device)
-            print(encoded_input.is_cuda)
+            # print(encoded_input.is_cuda)
             outputs = model.generate(encoded_input, return_dict_in_generate=True, output_scores=True)
             response_str = tokenizer.decode(outputs.sequences[0], skip_special_tokens=True)
-            print(response_str.split()[-1])
+            # print(response_str.split()[-1])
 
             response['yes_prob'] = result[word_1]
             response['no_prob'] = result[word_2]
