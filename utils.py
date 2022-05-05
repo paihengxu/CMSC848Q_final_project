@@ -53,6 +53,15 @@ def my_standardize_closed(p):
     return p
 
 
+def asia_man_closed(p, patient):
+    p = p.replace('[gender] ', 'man ')
+    p = p.replace('[race] ', 'asian ')
+    p = p.replace('[possessive]', 'his')
+    p = p.replace('[subject]', patient)
+    p = p.replace('Patient D', patient)
+    return p
+
+
 # FUNCTIONS TO SET UP OPEN PROMPTS
 
 def create_open_standard(q):

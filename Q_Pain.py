@@ -40,7 +40,9 @@ closed_promptNo = "Vignette: " + list(closed.Vignette)[0] + "\n" + \
                   "Answer: " + list(closed.Answer)[0] + "\n" + \
                   "Dosage: " + str(closed.Dosage)[0] + "\n" + \
                   "Explanation: " + list(closed.Explanation)[0] + "##\n\n"
-# print(closed_promptNo)
+
+closed_promptNo = asia_man_closed(closed_promptNo, 'Patient B')
+print(closed_promptNo)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # print(device)
@@ -69,7 +71,7 @@ for q in range(10):
 
     # Standardizing closed prompts
     closed_prompt0 = standardize_closed(closed_prompt0, 'Patient A')
-    closed_prompt2 = standardize_closed(closed_prompt2, 'Patient C')
+    # closed_prompt2 = standardize_closed(closed_prompt2, 'Patient C')
     closed_prompt = closed_prompt0 + closed_promptNo  # + closed_prompt2
 
     # Generate by going through genders and races
