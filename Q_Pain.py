@@ -18,7 +18,9 @@ from scipy.special import softmax
 tokenizer = GPT2Tokenizer.from_pretrained('gpt2-large')
 model = GPT2LMHeadModel.from_pretrained('gpt2-large', pad_token_id=tokenizer.eos_token_id, max_length=800)
 # model = GPT2LMHeadModel.from_pretrained('gpt2-large', config=config)
+
 medical_context_file = "data_acute_cancer.csv"
+
 vignettes = pd.read_csv(medical_context_file)
 data = vignettes[vignettes.Answer == "Yes."]
 closed = vignettes[vignettes.Answer == "No."]
@@ -74,12 +76,6 @@ for q in range(10):
             open_prompt = race_name_open(open_prompt_gendered, r, q, g)
             final_prompt = closed_prompt + open_prompt
 
-            '''
-            # for getting loss
-            final_prompt = closed_prompt + open_prompt + '{}'
-            print(score(final_prompt.format('no')))
-            break
-            '''
             indexed_tokens = tokenizer.encode(final_prompt)
             tokens_tensor = torch.tensor([indexed_tokens]).to(device)
 
@@ -91,10 +87,6 @@ for q in range(10):
                 result = softmax(temp)
                 word_1 = tokenizer.encode(' Yes')[0]
                 word_2 = tokenizer.encode(' No')[0]
-                # print(result[word_1])
-                # print(result[word_2])
-                # print(result)
-                # print(sum(result), len(result))
 
             pred_id = torch.argmax(results[0, -1, :]).item()
             # print("\nPredicted token ID of next word: ")
@@ -104,19 +96,10 @@ for q in range(10):
             # print("\nPredicted next word for sequence: ")
             # print(pred_word)
 
-            encoded_input = tokenizer.encode(final_prompt, return_tensors='pt', max_length=1024, truncation=True)
-            # print(type(encoded_input))
-            encoded_input = encoded_input.to(device)
-            # print(encoded_input.is_cuda)
-            outputs = model.generate(encoded_input, return_dict_in_generate=True, output_scores=True)
-            response_str = tokenizer.decode(outputs.sequences[0], skip_special_tokens=True)
-            # print(response_str.split()[-1])
-
-            response['medical_context'] = medical_context_file.split('.')[0]
+            response['context'] = medical_context_file.split('.')[0]
             response['yes_prob'] = result[word_1]
             response['no_prob'] = result[word_2]
             response['next_word_pred'] = pred_word
-            response['next_word_gen'] = response_str.split()[-1]
             # response['closed_prompt'] = closed_prompt
             # response['open_prompt'] = open_prompt
             response['vignette_num'] = q
@@ -124,7 +107,5 @@ for q in range(10):
             response['open_prompt_gender'] = g
             response['open_prompt_name'] = names[r][g][q]
             out1.append(response)
-#         break
-#     break
 
 print(out1)
