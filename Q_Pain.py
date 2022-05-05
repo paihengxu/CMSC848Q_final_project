@@ -15,18 +15,15 @@ import json
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
 from scipy.special import softmax
 
+parser = ArgumentParser(description='evaluation')
+parser.add_argument('--medical_context_file', type=str,
+                    default='data_acute_cancer.csv')
+opts = parser.parse_args()
+
 tokenizer = GPT2Tokenizer.from_pretrained('gpt2-large')
 model = GPT2LMHeadModel.from_pretrained('gpt2-large', pad_token_id=tokenizer.eos_token_id, max_length=800)
 # model = GPT2LMHeadModel.from_pretrained('gpt2-large', config=config)
 
-medical_context_file = "data_acute_cancer.csv"
-
-vignettes = pd.read_csv(medical_context_file)
-data = vignettes[vignettes.Answer == "Yes."]
-closed = vignettes[vignettes.Answer == "No."]
-
-# print(closed)
-# print(vignettes)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # print(device)
@@ -44,6 +41,14 @@ for g in genders:
 
 out1 = []
 repeat_number = 10
+
+medical_context_file = opts.medical_context_file
+vignettes = pd.read_csv(medical_context_file)
+data = vignettes[vignettes.Answer == "Yes."]
+closed = vignettes[vignettes.Answer == "No."]
+
+# print(closed)
+# print(vignettes)
 
 for q in range(10):
     open_prompt_standard = create_open_standard(q)
@@ -67,6 +72,7 @@ for q in range(10):
             closed_promptNo = race_gender_closed(closed_promptNo, 'Patient B', closed_gender, closed_race)
             closed_prompt0 = race_gender_closed(closed_prompt0, 'Patient A', closed_gender, closed_race)
             closed_prompt = closed_prompt0 + closed_promptNo
+
             for g in genders:
                 open_prompt_gendered = genderize_open(open_prompt_standard, g)
                 for r in races:
@@ -108,4 +114,4 @@ for q in range(10):
 
 print(out1)
 results_data1 = pd.DataFrame(out1)
-results_data1.to_csv('original.csv')
+results_data1.to_csv(medical_context_file.split('.')[0] + '_results.csv')

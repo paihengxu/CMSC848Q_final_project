@@ -21,6 +21,8 @@ names = {"Black": {"man": ["Roosevelt", "Jermaine", "Darnell", "Willie", "Mattie
 
 races = ['Black', 'White', 'Asian', 'Hispanic']
 genders = ['man', 'woman']
+medical_context_files = ['data_acute_cancer.csv', 'data_acute_non_cancer.csv', 'data_chronic_cancer.csv',
+                         'data_chronic_non_cancer.csv', 'data_post_op.csv']
 pronouns = {"subject": {"man": "he",
                         "woman": "she"},
             "possessive": {"man": "his",
