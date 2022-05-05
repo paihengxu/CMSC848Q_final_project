@@ -23,7 +23,7 @@ configuration = GPT2Config()
 configuration.max_length = 700
 
 # Initializing a model from the configuration
-model = GPT2LMHeadModel(configuration, pad_token_id=tokenizer.eos_token_id)
+model = GPT2LMHeadModel(configuration)
 
 # Accessing the model configuration
 configuration = model.config
