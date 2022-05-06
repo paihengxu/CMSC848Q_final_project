@@ -90,7 +90,7 @@ for q in range(10):
                 closed_gender = "None"
                 closed_race = "None"
 
-            closed_prompt = closed_prompt0 + closed_prompt2 + closed_promptNo
+            closed_prompt = closed_prompt0 + closed_promptNo  # +closed_prompt2
 
             for g in genders:
                 open_prompt_gendered = genderize_open(open_prompt_standard, g)
