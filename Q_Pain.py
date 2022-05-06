@@ -83,7 +83,7 @@ for q in range(10):
                 closed_prompt2 = race_gender_closed(closed_prompt0, 'Patient B', closed_gender, closed_race)
 
             else:
-                closed_promptNo = standardize_closed(closed_prompt0, 'Patient C')
+                closed_promptNo = standardize_closed(closed_promptNo, 'Patient C')
                 closed_prompt0 = standardize_closed(closed_prompt0, 'Patient A')
                 closed_prompt2 = standardize_closed(closed_prompt2, 'Patient B')
 
