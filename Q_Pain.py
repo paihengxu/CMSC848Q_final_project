@@ -71,8 +71,9 @@ for q in range(10):
     # Generate by going through genders and races
     for closed_gender in genders:
         for closed_race in races:
-            closed_promptNo = race_gender_closed(closed_promptNo, 'Patient B', closed_gender, closed_race)
+            closed_promptNo = race_gender_closed(closed_promptNo, 'Patient C', closed_gender, closed_race)
             closed_prompt0 = race_gender_closed(closed_prompt0, 'Patient A', closed_gender, closed_race)
+            closed_prompt2 = race_gender_closed(closed_prompt0, 'Patient B', closed_gender, closed_race)
             closed_prompt = closed_prompt0 + closed_prompt2 + closed_promptNo
 
             for g in genders:
