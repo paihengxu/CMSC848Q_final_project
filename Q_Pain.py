@@ -16,8 +16,8 @@ from transformers import GPT2LMHeadModel, GPT2Tokenizer
 from scipy.special import softmax
 
 parser = ArgumentParser(description='evaluation')
-parser.add_argument('--medical_context_file', type=str,
-                    default='data_acute_cancer.csv')
+parser.add_argument('--medical_context_file', type=str, default='data_acute_cancer.csv')
+parser.add_argument('--closed_prompt', type=str, default='biased')
 opts = parser.parse_args()
 
 tokenizer = GPT2Tokenizer.from_pretrained('gpt2-large')
@@ -43,6 +43,11 @@ out1 = []
 repeat_number = 10
 
 medical_context_file = opts.medical_context_file
+
+if_biased = True
+if opts.closed_prompt == "baseline":
+    if_biased = False
+
 vignettes = pd.read_csv(medical_context_file)
 data = vignettes[vignettes.Answer == "Yes."]
 closed = vignettes[vignettes.Answer == "No."]
@@ -71,9 +76,20 @@ for q in range(10):
     # Generate by going through genders and races
     for closed_gender in genders:
         for closed_race in races:
-            closed_promptNo = race_gender_closed(closed_promptNo, 'Patient C', closed_gender, closed_race)
-            closed_prompt0 = race_gender_closed(closed_prompt0, 'Patient A', closed_gender, closed_race)
-            closed_prompt2 = race_gender_closed(closed_prompt0, 'Patient B', closed_gender, closed_race)
+
+            if if_biased:
+                closed_promptNo = race_gender_closed(closed_promptNo, 'Patient C', closed_gender, closed_race)
+                closed_prompt0 = race_gender_closed(closed_prompt0, 'Patient A', closed_gender, closed_race)
+                closed_prompt2 = race_gender_closed(closed_prompt0, 'Patient B', closed_gender, closed_race)
+
+            else:
+                closed_promptNo = standardize_closed(closed_prompt0, 'Patient C')
+                closed_prompt0 = standardize_closed(closed_prompt0, 'Patient A')
+                closed_prompt2 = standardize_closed(closed_prompt2, 'Patient B')
+
+                closed_gender = "None"
+                closed_race = "None"
+
             closed_prompt = closed_prompt0 + closed_prompt2 + closed_promptNo
 
             for g in genders:
@@ -117,4 +133,4 @@ for q in range(10):
 
 # print(out1)
 results_data1 = pd.DataFrame(out1)
-results_data1.to_csv(medical_context_file.split('.')[0] + '_results.csv')
+results_data1.to_csv(medical_context_file.split('.')[0] + "_" + opts.closed_prompt + '_results.csv')
