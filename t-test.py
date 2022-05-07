@@ -1,4 +1,3 @@
-from email.mime import base
 import pandas as pd
 from scipy.stats import ttest_ind
 
