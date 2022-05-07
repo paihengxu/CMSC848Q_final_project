@@ -139,6 +139,8 @@ for i in range(len(data)):
 
                 if not if_biased:
                     break
+            if not if_biased:
+                break
 
 # print(out1)
 results_data1 = pd.DataFrame(out1)
