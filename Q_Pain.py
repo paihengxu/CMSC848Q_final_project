@@ -137,6 +137,9 @@ for i in range(len(data)):
                         response['yes_prompt_vignette_num'] = i
                         out1.append(response)
 
+                if not if_biased:
+                    break
+
 # print(out1)
 results_data1 = pd.DataFrame(out1)
 results_data1.to_csv("iterated_results/" + medical_context_file.split('.')[0] + "_" + opts.closed_prompt + '_results.csv')
