@@ -15,19 +15,30 @@ def create_path(context, bool):
         return '/Users/zhaoyujian/CMSC848Q_final_project/iterated_results/data_' + context + '_biased_results.csv'
 
 def ttest(context, race, gender):
-    dic = {'context' : context, 'race' : race, 'gender': gender, 't-test-stats': 0, 'p-value': 0}
+    dic = {'context' : context, 'open_prompt_race' : race, 'open_prompt_gender': gender, 'closed_prompt_race': '', 'closed_prompt_gender': '', 't-test-stats': 0, 'p-value': 0}
     baseline = pd.read_csv(create_path(context, True))
     biased = pd.read_csv(create_path(context, False))
-    baseline_yes = baseline.loc[baseline['open_prompt_race'] == race]
-    baseline_yes = baseline_yes.loc[baseline_yes['open_prompt_gender'] == gender]
 
-    biased_yes = biased.loc[biased['open_prompt_race'] == race]
-    biased_yes = biased_yes.loc[biased_yes['open_prompt_gender'] == gender]
+    baseline_select = baseline.loc[baseline['open_prompt_race'] == race]
+    baseline_select = baseline_select.loc[baseline_select['open_prompt_gender'] == gender]
 
-    res = ttest_ind(baseline_yes['no_prob'], biased_yes['no_prob'])
-    dic['t-test-stats'] = res.statistic
-    dic['p-value'] = res.pvalue
-    ans.append(dic)
+    for r in races:
+        for g in genders:
+            biased_closed = biased.loc[biased['closed_prompt_race'] == r]
+            biased_closed = biased_closed.loc[biased_closed['closed_prompt_gender'] == g]
+
+            biased_select = biased_closed.loc[biased_closed['open_prompt_race'] == race]
+            biased_select = biased_select.loc[biased_select['open_prompt_gender'] == gender]
+
+            res = ttest_ind(baseline_select['no_prob'], biased_select['no_prob'])
+            dic['t-test-stats'] = res.statistic
+            dic['p-value'] = res.pvalue
+            dic['closed_prompt_race'] = r
+            dic['closed_prompt_gender'] = g
+            ans.append(dic)
+            dic = {'context' : context, 'open_prompt_race' : race, 'open_prompt_gender': gender, 'closed_prompt_race': '', 'closed_prompt_gender': '', 't-test-stats': 0, 'p-value': 0}
+
+    
 
 # print(ttest('acute_cancer', 'Black', 'man'))
 # print(ttest('acute_cancer', 'Black', 'woman'))
