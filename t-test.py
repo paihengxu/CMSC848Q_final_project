@@ -10,9 +10,9 @@ ans = []
 
 def create_path(context, bool):
     if bool: 
-        return '/Users/zhaoyujian/CMSC848Q_final_project/results/data_' + context + '_baseline_results.csv'
+        return '/Users/zhaoyujian/CMSC848Q_final_project/iterated_results/data_' + context + '_baseline_results.csv'
     else:
-        return '/Users/zhaoyujian/CMSC848Q_final_project/results/data_' + context + '_biased_results.csv'
+        return '/Users/zhaoyujian/CMSC848Q_final_project/iterated_results/data_' + context + '_biased_results.csv'
 
 def ttest(context, race, gender):
     dic = {'context' : context, 'race' : race, 'gender': gender, 't-test-stats': 0, 'p-value': 0}
