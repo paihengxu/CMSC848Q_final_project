@@ -83,19 +83,19 @@ for i in range(len(data)):
             for closed_race in races:
 
                 if if_biased:
-                    closed_promptNo = race_gender_closed(closed_promptNo, 'Patient C', closed_gender, closed_race)
-                    closed_prompt0 = race_gender_closed(closed_prompt0, 'Patient A', closed_gender, closed_race)
+                    closed_promptNo_tmp = race_gender_closed(closed_promptNo, 'Patient C', closed_gender, closed_race)
+                    closed_prompt0_tmp = race_gender_closed(closed_prompt0, 'Patient A', closed_gender, closed_race)
                     # closed_prompt2 = race_gender_closed(closed_prompt0, 'Patient B', closed_gender, closed_race)
 
                 else:
-                    closed_promptNo = standardize_closed(closed_promptNo, 'Patient C')
-                    closed_prompt0 = standardize_closed(closed_prompt0, 'Patient A')
+                    closed_promptNo_tmp = standardize_closed(closed_promptNo, 'Patient C')
+                    closed_prompt0_tmp = standardize_closed(closed_prompt0, 'Patient A')
                     # closed_prompt2 = standardize_closed(closed_prompt2, 'Patient B')
 
                     closed_gender = "None"
                     closed_race = "None"
 
-                closed_prompt = closed_prompt0 + closed_promptNo  # +closed_prompt2
+                closed_prompt = closed_prompt0_tmp + closed_promptNo_tmp  # +closed_prompt2
 
                 for g in genders:
                     open_prompt_gendered = genderize_open(open_prompt_standard, g)
@@ -135,6 +135,8 @@ for i in range(len(data)):
                         response['open_prompt_name'] = names[r][g][q]
                         response['open_vignette_num'] = q
                         response['yes_prompt_vignette_num'] = i
+                        response['closed_prompt'] = closed_prompt
+                        response['open_prompt'] = open_prompt
                         out1.append(response)
 
                 if not if_biased:
