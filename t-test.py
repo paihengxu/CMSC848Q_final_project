@@ -1,3 +1,4 @@
+from statistics import mean
 import pandas as pd
 from scipy.stats import ttest_ind
 
@@ -15,7 +16,7 @@ def create_path(context, bool):
         return '/Users/zhaoyujian/CMSC848Q_final_project/iterated_results/data_' + context + '_biased_results.csv'
 
 def ttest(context, race, gender):
-    dic = {'context' : context, 'open_prompt_race' : race, 'open_prompt_gender': gender, 'closed_prompt_race': '', 'closed_prompt_gender': '', 't-test-stats': 0, 'p-value': 0}
+    dic = {'context' : context, 'closed_prompt_race': '', 'closed_prompt_gender': '', 'open_prompt_race' : race, 'open_prompt_gender': gender, 't-test-stats': 0, 'p-value': 0, 'group_mean_diff': 0}
     baseline = pd.read_csv(create_path(context, True))
     biased = pd.read_csv(create_path(context, False))
 
@@ -31,12 +32,14 @@ def ttest(context, race, gender):
             biased_select = biased_select.loc[biased_select['open_prompt_gender'] == gender]
 
             res = ttest_ind(baseline_select['no_prob'], biased_select['no_prob'])
+            mean_diff = abs(baseline_select['no_prob'].mean() - biased_select['no_prob'].mean())
             dic['t-test-stats'] = res.statistic
             dic['p-value'] = res.pvalue
             dic['closed_prompt_race'] = r
             dic['closed_prompt_gender'] = g
+            dic['group_mean_diff'] = mean_diff
             ans.append(dic)
-            dic = {'context' : context, 'open_prompt_race' : race, 'open_prompt_gender': gender, 'closed_prompt_race': '', 'closed_prompt_gender': '', 't-test-stats': 0, 'p-value': 0}
+            dic = {'context' : context,'closed_prompt_race': '', 'closed_prompt_gender': '', 'open_prompt_race' : race, 'open_prompt_gender': gender, 't-test-stats': 0, 'p-value': 0, 'group_mean_diff': 0}
 
     
 
