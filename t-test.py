@@ -32,7 +32,7 @@ def ttest(context, race, gender):
             biased_select = biased_select.loc[biased_select['open_prompt_gender'] == gender]
 
             res = ttest_ind(baseline_select['no_prob'], biased_select['no_prob'])
-            mean_diff = abs(baseline_select['no_prob'].mean() - biased_select['no_prob'].mean())
+            mean_diff = biased_select['no_prob'].mean() - baseline_select['no_prob'].mean()
             dic['t-test-stats'] = res.statistic
             dic['p-value'] = res.pvalue
             dic['closed_prompt_race'] = r
