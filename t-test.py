@@ -16,8 +16,8 @@ def create_path(context, bool):
         return '/Users/zhaoyujian/CMSC848Q_final_project/iterated_results/data_' + context + '_biased_results.csv'
 
 def ttest(context, race, gender):
-    dic = {}
-    # dic = {'context' : context, 'closed_prompt_race': '', 'closed_prompt_gender': '', 'open_prompt_race' : race, 'open_prompt_gender': gender, 't-test-stats': 0, 'p-value': 0, 'group_mean_diff': 0}
+    # dic = {}
+    dic = {'context' : context, 'closed_prompt_race': '', 'closed_prompt_gender': '', 'open_prompt_race' : race, 'open_prompt_gender': gender, 't-test-stats': 0, 'p-value': 0, 'group_mean_diff': 0}
     baseline = pd.read_csv('iterated_results/data_' + context + '_baseline_results.csv')
     biased = pd.read_csv('iterated_results/data_' + context + '_biased_results.csv')
 
@@ -42,7 +42,7 @@ def ttest(context, race, gender):
             dic['closed_prompt_gender'] = g
             dic['group_mean_diff'] = mean_diff
             ans.append(dic)
-            # dic = {'context' : context,'closed_prompt_race': '', 'closed_prompt_gender': '', 'open_prompt_race' : race, 'open_prompt_gender': gender, 't-test-stats': 0, 'p-value': 0, 'group_mean_diff': 0}
+            dic = {'context' : context,'closed_prompt_race': '', 'closed_prompt_gender': '', 'open_prompt_race' : race, 'open_prompt_gender': gender, 't-test-stats': 0, 'p-value': 0, 'group_mean_diff': 0}
 
     
 
