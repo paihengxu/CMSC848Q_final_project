@@ -24,7 +24,7 @@ def heatmap_plot(result_df, medical_context):
     result = result_df.pivot(index='Demographic Combination in Open Prompts',
                              columns='Demographic Combination in Closed Prompts', values='No. Probability Difference')
 
-    ax = sns.heatmap(result, center=0)
+    ax = sns.heatmap(result, center=0, cmap="coolwarm")
     ax.invert_yaxis()
     plt.savefig('./results/heatmap_in_' + medical_context + ".png")
     plt.clf()
