@@ -24,5 +24,7 @@ but we do not get suitable dataset.
 
 `ipynb` files are the code for us to experiment how to write the code and will not generate our main results.
 
+Please refer to `requirements.txt` file to install the packages and we run our code with Python3.7.
+
 
 
