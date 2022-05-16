@@ -34,7 +34,7 @@ model.cuda(device)
 out1 = []
 repeat_number = len(data)  # how many open prompts per setting, i.e., number of yes prompts and names per combo
 
-medical_context_file = opts.medical_context_file
+medical_context_file = "results/" + opts.medical_context_file
 
 if_biased = True
 if opts.closed_prompt == "baseline":
