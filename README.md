@@ -12,13 +12,15 @@ python Q_Pain.py --medical_context_file "data_acute_cancer.csv" --closed_prompt 
 ```
 `t-test.py` contains the code to calculate the p-value for the significance test.
 
-`bar_plot.py` contains the code to generated the heatmap visualizations of differences between biased prompts and baseline prompts.
+`bar_plot.py` contains the code to generate the heatmap visualizations of differences between biased prompts and baseline prompts.
 
 `representative_bias.py` contains the code to examine the representative bias.
 
 `results` folder contains the original Q-pain dataset and the heatmap visualizations.
-`iterated_results` folder contains the "No. probability" of each demographic combinations in promtps.
+`iterated_results` folder contains the "No. probability" of each demographic combinations in prompts.
 
+`reddit_results` contains the code the script to attempt to generate additional data to supplement Q-pain dataset, 
+but we do not get suitable dataset.
 
 
 
