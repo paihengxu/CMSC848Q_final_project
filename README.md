@@ -16,7 +16,8 @@ python Q_Pain.py --medical_context_file "data_acute_cancer.csv" --closed_prompt 
 
 `representative_bias.py` contains the code to examine the representative bias.
 
-`results` folder contains the probability of each demographic combinations, the original Q-pain dataset and the heatmap visualizations.
+`results` folder contains the original Q-pain dataset and the heatmap visualizations.
+`iterated_results` folder contains the "No. probability" of each demographic combinations in promtps.
 
 
 
