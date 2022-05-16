@@ -22,5 +22,7 @@ python Q_Pain.py --medical_context_file "data_acute_cancer.csv" --closed_prompt 
 `reddit_results` contains the code the script to attempt to generate additional data to supplement Q-pain dataset, 
 but we do not get suitable dataset.
 
+`ipynb` files are the code for us to experiment how to write the code and will not generate our main results.
+
 
 
